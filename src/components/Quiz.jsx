@@ -7,13 +7,19 @@ export default function Quiz() {
   // set active question index based on how many answers the user has given
   const activeQuestionIndex = userAnswers.length;
 
+  function handleSelectAnswer(selectedAnswer) {
+    setUserAnswers((prevUserAnswers) => {
+      return [...prevUserAnswers, selectedAnswer];
+    });
+  }
+
   return (
     <div id="question">
       <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
       <ul id="answers">
         {QUESTIONS[activeQuestionIndex].answers.map((answer) => (
           <li key={answer} className="answer">
-            <button>{answer}</button>
+            <button onClick={() => handleSelectAnswer(answer)}>{answer}</button>
           </li>
         ))}
       </ul>
