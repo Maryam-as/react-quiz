@@ -8,11 +8,6 @@ export default function Quiz() {
   // set active question index based on how many answers the user has given
   const activeQuestionIndex = userAnswers.length;
 
-  // create a shuffled copy of the current question's answers
-  // to randomize the order each time they are displayed
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
-
   // check if all questions have been answered (i.e., quiz is complete)
   const isQuizComplete = activeQuestionIndex === QUESTIONS.length;
 
@@ -31,6 +26,11 @@ export default function Quiz() {
       </div>
     );
   }
+
+  // create a shuffled copy of the current question's answers
+  // to randomize the order each time they are displayed
+  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
+  shuffledAnswers.sort(() => Math.random() - 0.5);
 
   return (
     <div id="quiz">
