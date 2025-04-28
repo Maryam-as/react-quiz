@@ -12,6 +12,9 @@ export default function Quiz() {
   const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
   shuffledAnswers.sort(() => Math.random() - 0.5);
 
+  // check if all questions have been answered (i.e., quiz is complete)
+  const isQuizComplete = activeQuestionIndex === QUESTIONS.length;
+
   function handleSelectAnswer(selectedAnswer) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer];
