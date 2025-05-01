@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import QUESTIONS from "../questions.js";
 import quizCompleteImg from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
@@ -12,11 +12,23 @@ export default function Quiz() {
   // check if all questions have been answered (i.e., quiz is complete)
   const isQuizComplete = activeQuestionIndex === QUESTIONS.length;
 
-  function handleSelectAnswer(selectedAnswer) {
+  // memoize handleSelectAnswer to maintain referential stability,
+  // ensuring dependent callbacks like handleSkipAnswer don't change unnecessarily.
+  const handleSelectAnswer = useCallback(function handleSelectAnswer(
+    selectedAnswer
+  ) {
     setUserAnswers((prevUserAnswers) => {
       return [...prevUserAnswers, selectedAnswer];
     });
-  }
+  },
+  []);
+
+  // memoize the skip handler to prevent recreation on every render,
+  // avoiding unnecessary resets of the QuestionTimer's timeout effect.
+  const handleSkipAnswer = useCallback(
+    () => handleSelectAnswer(null),
+    [handleSelectAnswer]
+  );
 
   // render the "Quiz Completed" message with a trophy icon when the quiz is finished
   if (isQuizComplete) {
@@ -36,12 +48,7 @@ export default function Quiz() {
   return (
     <div id="quiz">
       <div id="question">
-        <QuestionTimer
-          timeout={30000}
-          onTimeout={() => {
-            handleSelectAnswer(null);
-          }}
-        />
+        <QuestionTimer timeout={30000} onTimeout={handleSkipAnswer} />
         <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
         <ul id="answers">
           {shuffledAnswers.map((answer) => (
