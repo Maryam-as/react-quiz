@@ -4,6 +4,7 @@ import quizCompleteImg from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
 
 export default function Quiz() {
+  const [answerState, setAnswerState] = useState("");
   const [userAnswers, setUserAnswers] = useState([]);
 
   // set active question index based on how many answers the user has given
