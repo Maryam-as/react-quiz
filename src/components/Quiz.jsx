@@ -15,14 +15,25 @@ export default function Quiz() {
 
   // memoize handleSelectAnswer to maintain referential stability,
   // ensuring dependent callbacks like handleSkipAnswer don't change unnecessarily.
-  const handleSelectAnswer = useCallback(function handleSelectAnswer(
-    selectedAnswer
-  ) {
-    setUserAnswers((prevUserAnswers) => {
-      return [...prevUserAnswers, selectedAnswer];
-    });
-  },
-  []);
+  const handleSelectAnswer = useCallback(
+    function handleSelectAnswer(selectedAnswer) {
+      setAnswerState("answered"); // show as selected
+      setUserAnswers((prevUserAnswers) => {
+        return [...prevUserAnswers, selectedAnswer];
+      });
+      // delay evaluation of the selected answer by 1 second to allow for a visual feedback pause.
+      // after the delay, update the answerState to "correct" or "wrong" based on whether the selected
+      // answer matches the first item in the answer list (since it is the correct answer).
+      setTimeout(() => {
+        if (selectedAnswer === QUESTIONS[activeQuestionIndex].answers[0]) {
+          setAnswerState("correct");
+        } else {
+          setAnswerState("wrong");
+        }
+      }, 1000);
+    },
+    [activeQuestionIndex]
+  );
 
   // memoize the skip handler to prevent recreation on every render,
   // avoiding unnecessary resets of the QuestionTimer's timeout effect.
