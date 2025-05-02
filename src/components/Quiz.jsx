@@ -7,8 +7,11 @@ export default function Quiz() {
   const [answerState, setAnswerState] = useState("");
   const [userAnswers, setUserAnswers] = useState([]);
 
-  // set active question index based on how many answers the user has given
-  const activeQuestionIndex = userAnswers.length;
+  // determine the index of the currently active question.
+  // if no answer is being processed (`answerState === ""`), use the number of user answers submitted.
+  // if an answer is being shown with feedback, subtract 1 to keep showing the same question during the delay.
+  const activeQuestionIndex =
+    answerState === "" ? userAnswers.length : userAnswers.length - 1;
 
   // check if all questions have been answered (i.e., quiz is complete)
   const isQuizComplete = activeQuestionIndex === QUESTIONS.length;
