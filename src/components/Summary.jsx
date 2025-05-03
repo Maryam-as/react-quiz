@@ -26,7 +26,7 @@ export default function Summary({ userAnswers }) {
             <li key={answer}>
               <h3>{index + 1}</h3>
               <p className="question">{QUESTIONS[index].text}</p>
-              <p className="user-answer">{answer}</p>
+              <p className="user-answer">{answer ?? "Skipped"}</p>
             </li>
           );
         })}
