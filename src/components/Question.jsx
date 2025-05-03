@@ -6,6 +6,20 @@ import QUESTIONS from "../questions.js";
 export default function Question({ index, onSelectAnswer, onSkipAnswer }) {
   const [answer, setAnswer] = useState({ selectedAnswer: "", isCorrect: null });
 
+  // adjust timer duration dynamically based on current answer state:
+  // - 30s for initial question display
+  // - 1s delay after answer selection before showing feedback
+  // - 2s display duration for feedback (correct/wrong) before moving on
+  let timer = 30000;
+
+  if (answer.selectedAnswer) {
+    timer = 1000;
+  }
+
+  if (answer.isCorrect !== null) {
+    timer = 2000;
+  }
+
   function handleSelectAnswer(answer) {
     setAnswer({ selectedAnswer: answer, isCorrect: null });
 
@@ -31,7 +45,7 @@ export default function Question({ index, onSelectAnswer, onSkipAnswer }) {
 
   return (
     <div id="question">
-      <QuestionTimer timeout={30000} onTimeout={onSkipAnswer} />
+      <QuestionTimer timeout={timer} onTimeout={onSkipAnswer} />
       <h2>{QUESTIONS[index].text}</h2>
       <Answers
         answers={QUESTIONS[index].answers}
