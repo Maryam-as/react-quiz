@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState, useRef } from "react";
 import QUESTIONS from "../questions.js";
 import quizCompleteImg from "../assets/quiz-complete.png";
 import QuestionTimer from "./QuestionTimer.jsx";
 
 export default function Quiz() {
+  const shuffledAnswersRef = useRef();
   const [answerState, setAnswerState] = useState("");
   const [userAnswers, setUserAnswers] = useState([]);
 
@@ -59,10 +60,13 @@ export default function Quiz() {
     );
   }
 
-  // create a shuffled copy of the current question's answers
-  // to randomize the order each time they are displayed
-  const shuffledAnswers = [...QUESTIONS[activeQuestionIndex].answers];
-  shuffledAnswers.sort(() => Math.random() - 0.5);
+  // only shuffle the answers once per question render to avoid re-randomizing on each render cycle
+  if (!shuffledAnswersRef.current) {
+    // create a shuffled copy of the current question's answers
+    // to randomize the order each time they are displayed
+    shuffledAnswersRef.current = [...QUESTIONS[activeQuestionIndex].answers];
+    shuffledAnswersRef.current.sort(() => Math.random() - 0.5);
+  }
 
   return (
     <div id="quiz">
@@ -78,7 +82,7 @@ export default function Quiz() {
         />
         <h2>{QUESTIONS[activeQuestionIndex].text}</h2>
         <ul id="answers">
-          {shuffledAnswers.map((answer) => {
+          {shuffledAnswersRef.current.map((answer) => {
             // check if the current answer was the one most recently selected by the user
             const isSelected = userAnswers[userAnswers.length - 1] === answer;
             let cssClass = "";
