@@ -1,6 +1,7 @@
 import quizCompleteImg from "../assets/quiz-complete.png";
+import QUESTIONS from "../questions.js";
 
-export default function Summary() {
+export default function Summary({ userAnswers }) {
   return (
     <div id="summary">
       <img src={quizCompleteImg} alt="Trophy icon" />
@@ -20,11 +21,15 @@ export default function Summary() {
         </p>
       </div>
       <ol>
-        <li>
-          <h3>number of question</h3>
-          <p className="question">question text</p>
-          <p className="user-answer"> user's answer</p>
-        </li>
+        {userAnswers.map((answer, index) => {
+          return (
+            <li key={answer}>
+              <h3>{index + 1}</h3>
+              <p className="question">{QUESTIONS[index].text}</p>
+              <p className="user-answer">{answer}</p>
+            </li>
+          );
+        })}
       </ol>
     </div>
   );

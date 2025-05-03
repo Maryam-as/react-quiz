@@ -32,7 +32,7 @@ export default function Quiz() {
 
   // render the "Quiz Completed" message with a trophy icon when the quiz is finished
   if (isQuizComplete) {
-    return <Summary />;
+    return <Summary userAnswers={userAnswers} />;
   }
 
   return (
